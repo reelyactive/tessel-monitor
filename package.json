@@ -1,0 +1,36 @@
+{
+  "name": "tessel-monitor",
+  "version": "1.0.0",
+  "homepage": "https://github.com/reelyactive/tessel-monitor/",
+  "author": {
+    "name": "reelyActive",
+    "email": "info@reelyactive.com"
+  },
+  "description": "Monitor Bluetooth Low Energy traffic dynamics from a reelyActive Owl-in-One based on the Tessel 2 platform.  We believe in an open Internet of Things.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/reelyactive/tessel-monitor.git"
+  },
+  "keywords": [
+    "reelyActive",
+    "Owl-in-One",
+    "Tessel"
+  ],
+  "dependencies": {
+    "barnowl": "^1.2.2",
+    "barnowl-reel": ">=0.2.1",
+    "barnowl-tcpdump": ">=0.1.5",
+    "raddec": ">=0.4.1",
+    "raddec-filter": ">=0.4.0"
+  },
+  "contributors": [
+    {
+      "name": "Jeffrey Dungen"
+    }
+  ],
+  "license": "MIT"
+}
