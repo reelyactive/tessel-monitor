@@ -60,6 +60,7 @@ barnowl.on('raddec', function(raddec) {
   tessel.led[2].on();
   if(filter.isPassing(raddec)) {
     // TODO: handle raddec?
+    writeRaddec(raddec);
   }
   tessel.led[2].off();
 });
@@ -102,6 +103,31 @@ function writeLogfile(stats) {
 
 
 /**
+ * Write the given statistics to the current logfile.
+ * @param {Object} stats The reelceiverStatistics to write.
+ */
+function writeRaddec(raddec) {
+  let timestamp = Date.now();
+  let logfileRotationThreshold = timestamp -
+                                 (config.logfileMinutesToRotation * 60000);
+  let isNewLogfileRequired = !logfile || (logfile.lastRotationTimestamp <
+                                          logfileRotationThreshold);
+
+  if(isNewLogfileRequired) {
+    createNewLogfile();
+  }
+
+  let flatRaddec = raddec.toFlattened();
+  let csvLine = timestamp + config.logfileDelimiter +
+                flatRaddec.transmitterId + config.logfileDelimiter +
+                flatRaddec.rssi + config.logfileDelimiter +
+                flatRaddec.numberOfDecodings + '\r\n';
+
+  logfile.writeStreamRaddec.write(csvLine);
+}
+
+
+/**
  * Create a new logfile, closing the previous logfile, if applicable.
  */
 function createNewLogfile() {
@@ -114,11 +140,17 @@ function createNewLogfile() {
   let filenameStats = config.logfileNamePrefix + '-stats-' +
                       createCurrentTimeString(timestamp) +
                       config.logfileExtension;
+  let filenameRaddec = config.logfileNamePrefix + '-raddec-' +
+                       createCurrentTimeString(timestamp) +
+                       config.logfileExtension;
   let filepathStats = path.join(config.storageMountPoint, filenameStats);
+  let filepathRaddec = path.join(config.storageMountPoint, filenameRaddec);
   let writeStreamStats = fs.createWriteStream(filepathStats, { flags: "a" });
+  let writeStreamRaddec = fs.createWriteStream(filepathRaddec, { flags: "a" });
 
   logfile = {
       writeStreamStats: writeStreamStats,
+      writeStreamRaddec: writeStreamRaddec,
       lastRotationTimestamp: timestamp
   }
 
