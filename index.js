@@ -59,7 +59,6 @@ if(config.listenToTcpdump) {
 barnowl.on('raddec', function(raddec) {
   tessel.led[2].on();
   if(filter.isPassing(raddec)) {
-    // TODO: handle raddec?
     writeRaddec(raddec);
   }
   tessel.led[2].off();
@@ -99,7 +98,7 @@ function writeStats(stats) {
                 stats.crcFail + config.logfileDelimiter + '\r\n';
 
   logfile.writeStreamStats.write(csvLine);
-}t
+}
 
 
 /**
@@ -117,13 +116,21 @@ function writeRaddec(raddec) {
     createNewLogfile();
   }
 
-  let flatRaddec = raddec.toFlattened();
+  let flatRaddec = raddec.toFlattened({ includePackets: true });
   let csvLine = timestamp + config.logfileDelimiter +
                 flatRaddec.transmitterId + config.logfileDelimiter +
+                flatRaddec.transmitterIdType + config.logfileDelimiter +
+                flatRaddec.receiverId + config.logfileDelimiter +
                 flatRaddec.rssi + config.logfileDelimiter +
-                flatRaddec.numberOfDecodings + '\r\n';
+                flatRaddec.numberOfDecodings;
 
-  logfile.writeStreamRaddec.write(csvLine);
+  if(config.includePacketsInLogfile) {
+    for(const packet of flatRaddec.packets) {
+      csvLine += config.logfileDelimiter + packet;
+    }
+  }
+
+  logfile.writeStreamRaddec.write(csvLine + '\r\n');
 }
 
 
@@ -135,6 +142,7 @@ function createNewLogfile() {
 
   if(logfile) {
     logfile.writeStreamStats.end();
+    logfile.writeStreamRaddec.end();
   }
 
   let filenameStats = config.logfileNamePrefix + '-stats-' +
@@ -155,6 +163,7 @@ function createNewLogfile() {
   }
 
   writeStreamStats.on('error', handleError);
+  writeStreamRaddec.on('error', handleError)
 }
 
 
