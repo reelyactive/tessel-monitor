@@ -68,7 +68,7 @@ barnowl.on('raddec', function(raddec) {
 // Write the reelceiverStatistics to logfile
 barnowl.on('infrastructureMessage', function(message) {
   if(message.type === 'reelceiverStatistics') {
-    writeLogfile(message);
+    writeStats(message);
   }
 });
 
@@ -80,7 +80,7 @@ setInterval(function() { tessel.led[3].toggle(); }, 500);
  * Write the given statistics to the current logfile.
  * @param {Object} stats The reelceiverStatistics to write.
  */
-function writeLogfile(stats) {
+function writeStats(stats) {
   let timestamp = Date.now();
   let logfileRotationThreshold = timestamp -
                                  (config.logfileMinutesToRotation * 60000);
@@ -99,12 +99,12 @@ function writeLogfile(stats) {
                 stats.crcFail + config.logfileDelimiter + '\r\n';
 
   logfile.writeStreamStats.write(csvLine);
-}
+}t
 
 
 /**
- * Write the given statistics to the current logfile.
- * @param {Object} stats The reelceiverStatistics to write.
+ * Write the given raddec to the current logfile.
+ * @param {Object} raddec The raddec to write.
  */
 function writeRaddec(raddec) {
   let timestamp = Date.now();
