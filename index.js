@@ -66,7 +66,7 @@ barnowl.on('raddec', function(raddec) {
 
 // Write the reelceiverStatistics to logfile
 barnowl.on('infrastructureMessage', function(message) {
-  if(message.type === 'reelceiverStatistics') {
+  if((message.type === 'reelceiverStatistics') && (message.uptimeSeconds > 0)) {
     writeStats(message);
   }
 });
