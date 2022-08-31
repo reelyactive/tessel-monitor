@@ -31,7 +31,7 @@ All configuration parameters can be found in the file __config.js__.  Update onl
 | LISTEN_TO_TCPDUMP           | Enable listener on tcpdump (default: false)   |
 | ENABLE_MIXING               | Combine multiple decodings of an individual transmitter into a single raddec (default: true) |
 | MIXING_DELAY_MILLISECONDS   | Mixing delay of radio decodings (default: 1000) |
-| RADDEC_FILTER_PARAMETERS    | (see raddec-filter)                           |
+| RADDEC_FILTER_PARAMETERS    | (see [raddec-filter](https://github.com/reelyactive/raddec-filter/))                           |
 | UPTIME_BEACON_SIGNATURE     | ID signature of optional Eddystone-TLM beacon |
 | INCLUDE_PACKETS_IN_LOGFILE  | (default: false)                              |
 | LOGFILE_NAME_PREFIX         | (default: 'monitor')                          |
