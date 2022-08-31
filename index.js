@@ -34,8 +34,9 @@ const RECEIVER_ID_TYPE_BLE = 1;  // EUI-64
 const RECEIVER_ID_TYPE_WIFI = 2; // EUI-48
 
 
-// Logfile is a global variable
+// Logfile and uptime are global variables
 let logfile = null;
+let uptimeMilliseconds = '';
 
 // Create raddec filter
 let filter = new RaddecFilter(raddecFilterParameters);
@@ -58,6 +59,9 @@ if(config.listenToTcpdump) {
 // Handle the raddec while pulsing the green LED
 barnowl.on('raddec', function(raddec) {
   tessel.led[2].on();
+  if(raddec.signature === config.uptimeBeaconSignature) {
+    updateUptime(raddec.packets); 
+  }
   if(filter.isPassing(raddec)) {
     writeRaddec(raddec);
   }
@@ -91,11 +95,12 @@ function writeStats(stats) {
   }
 
   let csvLine = timestamp + config.logfileDelimiter +
+                uptimeMilliseconds + config.logfileDelimiter +
                 stats.receiverId + config.logfileDelimiter +
                 stats.uptimeSeconds + config.logfileDelimiter +
                 stats.sendCount + config.logfileDelimiter +
                 stats.crcPass + config.logfileDelimiter +
-                stats.crcFail + config.logfileDelimiter + '\r\n';
+                stats.crcFail + '\r\n';
 
   logfile.writeStreamStats.write(csvLine);
 }
@@ -118,6 +123,7 @@ function writeRaddec(raddec) {
 
   let flatRaddec = raddec.toFlattened({ includePackets: true });
   let csvLine = timestamp + config.logfileDelimiter +
+                uptimeMilliseconds + config.logfileDelimiter +
                 flatRaddec.transmitterId + config.logfileDelimiter +
                 flatRaddec.transmitterIdType + config.logfileDelimiter +
                 flatRaddec.receiverId + config.logfileDelimiter +
@@ -164,6 +170,20 @@ function createNewLogfile() {
 
   writeStreamStats.on('error', handleError);
   writeStreamRaddec.on('error', handleError)
+}
+
+
+/**
+ * Update the uptime based on an Eddystone-TLM packet
+ * @param {Array} packets The array of packets.
+ */
+function updateUptime(packets) {
+  for(const packet of packets) {
+    let isEddystoneTLM = (packet.substring(30, 42) === "1116aafe2000");
+    if(isEddystoneTLM) {
+      uptimeMilliseconds = Number.parseInt(packet.substring(58), 16) * 100;
+    }
+  }
 }
 
 

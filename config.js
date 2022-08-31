@@ -17,6 +17,7 @@ const MIXING_DELAY_MILLISECONDS = 1000;
 const RADDEC_FILTER_PARAMETERS = {
     minRSSI: -99
 };
+const UPTIME_BEACON_SIGNATURE = 'ac233f000000/2';
 const INCLUDE_PACKETS_IN_LOGFILE = false;
 const LOGFILE_NAME_PREFIX = 'monitor';
 const LOGFILE_EXTENSION = '.csv';
@@ -34,6 +35,7 @@ module.exports.listenToTcpdump = LISTEN_TO_TCPDUMP;
 module.exports.enableMixing = ENABLE_MIXING;
 module.exports.mixingDelayMilliseconds = MIXING_DELAY_MILLISECONDS;
 module.exports.raddecFilterParameters = RADDEC_FILTER_PARAMETERS;
+module.exports.uptimeBeaconSignature = UPTIME_BEACON_SIGNATURE;
 module.exports.includePacketsInLogfile = INCLUDE_PACKETS_IN_LOGFILE;
 module.exports.logfileNamePrefix = LOGFILE_NAME_PREFIX;
 module.exports.logfileExtension = LOGFILE_EXTENSION;
