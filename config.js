@@ -15,6 +15,8 @@ const LISTEN_TO_TCPDUMP = false;
 const ENABLE_MIXING = true;
 const MIXING_DELAY_MILLISECONDS = 1000;
 const RADDEC_FILTER_PARAMETERS = {
+    acceptedReceiverIdTypes: [ Raddec.identifiers.TYPE_EUI64,
+                               Raddec.identifiers.TYPE_EUI48 ],
     minRSSI: -99
 };
 const UPTIME_BEACON_SIGNATURE = 'ac233f000000/2';
@@ -24,7 +26,7 @@ const LOGFILE_EXTENSION = '.csv';
 const LOGFILE_DELIMITER = ',';
 const LOGFILE_MINUTES_TO_ROTATION = 60;
 const STORAGE_MOUNT_POINT = '/mnt/sda1';
-const IS_DEBUG_MODE = true;
+const IS_DEBUG_MODE = false;
 
 // ---------------------------
 // End configurable parameters
